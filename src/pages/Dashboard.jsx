@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Wind, Thermometer, Droplets, Gauge, MapPin, Activity, TrendingUp, TrendingDown, AlertCircle, CheckCircle, Info, Brain, Bell, Menu, LayoutDashboard, Map, BarChart3, Settings, Cloud, Shield, Zap, Eye, Clock, RefreshCw, Sparkles, Leaf, Sun, Moon, Star, Heart, Target, Award, TrendingDown as TrendDown, BarChart, PieChart, LineChart, Globe } from 'lucide-react';
 import UserSidebar from '../components/UserSidebar';

@@ -1,4 +1,3 @@
-import React from 'react';
 import AdminLayout from '../components/AdminLayout';
 import { Database } from 'lucide-react';
 

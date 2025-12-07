@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Wind } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 
 export default function SplashScreen({ onComplete, isFading = false }) {
   const containerRef = useRef(null);
@@ -154,4 +154,9 @@ export default function SplashScreen({ onComplete, isFading = false }) {
     </div>
   );
 }
+
+SplashScreen.propTypes = {
+  onComplete: PropTypes.func,
+  isFading: PropTypes.bool
+};
 

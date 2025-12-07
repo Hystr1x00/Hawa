@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Menu } from 'lucide-react';
 import AdminSidebar from './AdminSidebar';
 
@@ -51,4 +52,8 @@ export default function AdminLayout({ children }) {
     </div>
   );
 }
+
+AdminLayout.propTypes = {
+  children: PropTypes.node
+};
 

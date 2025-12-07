@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Mail, Lock, Eye, EyeOff, ArrowLeft, Wind } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { authService } from '../services/auth';
 
 export default function Login() {
@@ -95,7 +95,7 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const result = await authService.login(formData.email, formData.password);
+      await authService.login(formData.email, formData.password);
       
       // Small delay untuk memastikan state sudah update
       setTimeout(() => {
