@@ -43,7 +43,7 @@ export default function AppRouter() {
     const initialPage = getPageFromHash();
     
     // Redirect to login if trying to access dashboard without auth
-    if ((initialPage === 'dashboard' || initialPage === 'profile') && !authService.isAuthenticated()) {
+    if ((initialPage === 'dashboard' || initialPage === 'profile' || initialPage === 'map') && !authService.isAuthenticated()) {
       setCurrentPage('login');
       window.location.hash = '#login';
     } else if ((initialPage === 'admin' || initialPage === 'admin/iot-data') && !authService.isAuthenticated()) {

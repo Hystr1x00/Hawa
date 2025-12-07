@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import L from 'leaflet';
@@ -249,7 +249,7 @@ export default function HeatmapMap({
             const radius = getRiskRadius(point.risk_level, point.risk_score);
 
             return (
-              <div key={point.id}>
+              <Fragment key={point.id}>
                 <Circle
                   center={[point.lat, point.lng]}
                   radius={radius}
@@ -332,7 +332,7 @@ export default function HeatmapMap({
                     </div>
                   </Popup>
                 </Marker>
-              </div>
+              </Fragment>
             );
           })}
         </MapContainer>
