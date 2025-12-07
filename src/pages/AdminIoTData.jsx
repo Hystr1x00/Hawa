@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import AdminLayout from '../components/AdminLayout';
-import { RefreshCw, Database, Activity, TrendingUp, AlertCircle, CheckCircle, Clock, FileSpreadsheet, Users, BarChart3 } from 'lucide-react';
+import { RefreshCw, Database, Activity, AlertCircle, Clock, FileSpreadsheet, Users, BarChart3 } from 'lucide-react';
 import { adminService } from '../services/admin';
 import { authService } from '../services/auth';
 
@@ -20,46 +20,48 @@ export default function AdminIoTData() {
   const abortControllerRef = useRef(null);
 
   // Load data saat component mount
-  useEffect(() => {
-    loadData();
+useEffect(() => {
+  loadData();
 
-    // Set interval untuk auto-refresh setiap 30 menit (1800000 ms)
-    const interval = setInterval(() => {
-      refreshData();
-    }, 1800000); // 30 menit
+  // Set interval untuk auto-refresh setiap 30 menit (1800000 ms)
+  const interval = setInterval(() => {
+    refreshData();
+  }, 1800000); // 30 menit
 
-    return () => {
-      clearInterval(interval);
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
-    };
-  }, []); // Hanya run sekali saat mount
-
-  // Debounce untuk worksheet name input
-  useEffect(() => {
-    // Clear previous timer
+  return () => {
+    clearInterval(interval);
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
     }
+  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []); // Hanya run sekali saat mount
 
-    // Set new timer - tunggu 1 detik setelah user berhenti mengetik
-    debounceTimerRef.current = setTimeout(() => {
-      if (worksheetInput.trim() !== worksheetName) {
-        setWorksheetName(worksheetInput.trim() || 'Sheet1');
-        loadData();
-      }
-    }, 1000); // 1 detik debounce
+  // Debounce untuk worksheet name input
+useEffect(() => {
+  // Clear previous timer
+  if (debounceTimerRef.current) {
+    clearTimeout(debounceTimerRef.current);
+  }
 
-    return () => {
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
-    };
-  }, [worksheetInput]);
+  // Set new timer - tunggu 1 detik setelah user berhenti mengetik
+  debounceTimerRef.current = setTimeout(() => {
+    if (worksheetInput.trim() !== worksheetName) {
+      setWorksheetName(worksheetInput.trim() || 'Sheet1');
+      loadData();
+    }
+  }, 1000); // 1 detik debounce
+
+  return () => {
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [worksheetInput]);
 
   const loadData = async () => {
     // Cancel previous request jika masih berjalan

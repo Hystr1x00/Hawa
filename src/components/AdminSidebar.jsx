@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { LogOut, Users, Database, LayoutDashboard, X } from 'lucide-react';
 import { authService } from '../services/auth';
+import PropTypes from 'prop-types';
 
 export default function AdminSidebar({ isOpen, onClose }) {
   const [activeMenu, setActiveMenu] = useState('dashboard');
@@ -137,4 +138,9 @@ export default function AdminSidebar({ isOpen, onClose }) {
     </>
   );
 }
+
+AdminSidebar.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func
+};
 

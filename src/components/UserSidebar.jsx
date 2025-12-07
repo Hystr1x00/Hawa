@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LogOut, Users, LayoutDashboard, Map, User } from 'lucide-react';
 import { authService } from '../services/auth';
+import PropTypes from 'prop-types';
 
 export default function UserSidebar({ isOpen, onClose }) {
   const currentUser = authService.getCurrentUser();
@@ -118,4 +119,9 @@ export default function UserSidebar({ isOpen, onClose }) {
     </>
   );
 }
+
+UserSidebar.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func
+};
 

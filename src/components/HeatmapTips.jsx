@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 export default function HeatmapTips({
@@ -15,10 +15,17 @@ export default function HeatmapTips({
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const abortRef = useRef(null);
 
   const baseUrl = useMemo(() => apiUrl || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000', [apiUrl]);
 
-  const fetchTips = async () => {
+  const fetchTips = useCallback(async () => {
+    if (abortRef.current) {
+      abortRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     try {
       setLoading(true);
       setError('');
@@ -38,7 +45,8 @@ export default function HeatmapTips({
       const tryGet = async () => {
         const res = await fetch(`${baseUrl}/weather/heatmap/tips?${params.toString()}`, {
           method: 'GET',
-          headers
+          headers,
+          signal: controller.signal
         });
         if (!res.ok) {
           const err = new Error(res.status.toString());
@@ -57,7 +65,8 @@ export default function HeatmapTips({
             pm10,
             risk_level: riskLevel,
             location
-          })
+          }),
+          signal: controller.signal
         });
         if (!res.ok) {
           const err = new Error(res.status.toString());
@@ -97,18 +106,24 @@ export default function HeatmapTips({
       };
       setData(normalized);
     } catch (err) {
+      if (err.name === 'AbortError') return;
       setError(err.message || 'Gagal memuat tips');
     } finally {
       setLoading(false);
     }
-  };
+  }, [baseUrl, token, pm25, pm10, airQuality, riskLevel, location, language]);
 
   useEffect(() => {
     if (autoLoad && (pm25 !== undefined || pm10 !== undefined || riskLevel)) {
       fetchTips();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoLoad, pm25, pm10, riskLevel, location]);
+    // rerun when apiUrl/token/language/airQuality change to avoid stale requests
+    return () => {
+      if (abortRef.current) {
+        abortRef.current.abort();
+      }
+    };
+  }, [autoLoad, pm25, pm10, riskLevel, location, apiUrl, token, language, airQuality, fetchTips]);
 
   const tips = data?.tips || [];
   const meta = data?.meta || {};

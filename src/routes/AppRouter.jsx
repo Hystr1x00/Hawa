@@ -112,7 +112,7 @@ export default function AppRouter() {
     const handleStorageChange = (e) => {
       if (e.key === 'hawa_auth_token') {
         checkAuth();
-        if (currentPage === 'dashboard' || currentPage === 'profile' || currentPage === 'admin' || currentPage === 'admin/iot-data') {
+        if (currentPage === 'dashboard' || currentPage === 'profile' || currentPage === 'map' || currentPage === 'admin' || currentPage === 'admin/iot-data') {
           setCurrentPage('login');
           window.location.hash = '#login';
         }
