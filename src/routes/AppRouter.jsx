@@ -6,6 +6,7 @@ import Dashboard from '../pages/Dashboard.jsx';
 import Profile from '../pages/Profile.jsx';
 import AdminDashboard from '../pages/AdminDashboard.jsx';
 import AdminIoTData from '../pages/AdminIoTData.jsx';
+import MapPollutan from '../pages/MapPollutan.jsx';
 import SplashScreen from '../components/SplashScreen.jsx';
 import { authService } from '../services/auth.js';
 
@@ -24,6 +25,7 @@ export default function AppRouter() {
       hash === 'profile' ||
       hash === 'admin' ||
       hash === 'admin/iot-data'
+      || hash === 'map'
     ) {
       return hash;
     }
@@ -41,7 +43,7 @@ export default function AppRouter() {
     const initialPage = getPageFromHash();
     
     // Redirect to login if trying to access dashboard without auth
-    if ((initialPage === 'dashboard' || initialPage === 'profile') && !authService.isAuthenticated()) {
+    if ((initialPage === 'dashboard' || initialPage === 'profile' || initialPage === 'map') && !authService.isAuthenticated()) {
       setCurrentPage('login');
       window.location.hash = '#login';
     } else if ((initialPage === 'admin' || initialPage === 'admin/iot-data') && !authService.isAuthenticated()) {
@@ -64,7 +66,7 @@ export default function AppRouter() {
       const newPage = getPageFromHash();
       
       // Protect dashboard route
-      if ((newPage === 'dashboard' || newPage === 'profile') && !authService.isAuthenticated()) {
+      if ((newPage === 'dashboard' || newPage === 'profile' || newPage === 'map') && !authService.isAuthenticated()) {
         setCurrentPage('login');
         window.location.hash = '#login';
         return;
@@ -89,6 +91,7 @@ export default function AppRouter() {
         newPage === 'register' ||
         newPage === 'dashboard' ||
         newPage === 'profile' ||
+        newPage === 'map' ||
         newPage === 'admin' ||
         newPage === 'admin/iot-data'
       ) {
@@ -157,6 +160,7 @@ export default function AppRouter() {
         {currentPage === 'profile' && <Profile key={`profile-${pageKey}`} />}
         {currentPage === 'admin' && <AdminDashboard key={`admin-${pageKey}`} />}
         {currentPage === 'admin/iot-data' && <AdminIoTData key={`admin-iot-data-${pageKey}`} />}
+        {currentPage === 'map' && <MapPollutan key={`map-${pageKey}`} />}
         {currentPage === 'landing' && <HawaLanding key={`landing-${pageKey}`} />}
       </div>
       

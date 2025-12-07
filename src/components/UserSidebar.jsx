@@ -1,9 +1,21 @@
-import React from 'react';
-import { LogOut, Users } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { LogOut, Users, LayoutDashboard, Map, User } from 'lucide-react';
 import { authService } from '../services/auth';
 
 export default function UserSidebar({ isOpen, onClose }) {
   const currentUser = authService.getCurrentUser();
+  const [currentHash, setCurrentHash] = useState(window.location.hash || '#landing');
+  const navItems = [
+    { label: 'Dashboard', hash: '#dashboard', icon: LayoutDashboard },
+    { label: 'Map Pollutan', hash: '#map', icon: Map },
+    { label: 'Profil', hash: '#profile', icon: User }
+  ];
+
+  useEffect(() => {
+    const onHashChange = () => setCurrentHash(window.location.hash || '#landing');
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
   
   const handleLogout = () => {
     authService.logout();
@@ -41,22 +53,35 @@ export default function UserSidebar({ isOpen, onClose }) {
             </button>
           </div>
 
-          {/* Navigation Menu - Card Kosongan */}
-          <nav className="flex-1 px-4 py-6 space-y-4 overflow-y-auto min-h-0">
-            {/* Card Kosongan 1 */}
-            <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-              {/* Card kosong, siap untuk diisi konten */}
-            </div>
-            
-            {/* Card Kosongan 2 */}
-            <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-              {/* Card kosong, siap untuk diisi konten */}
-            </div>
-            
-            {/* Card Kosongan 3 */}
-            <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-              {/* Card kosong, siap untuk diisi konten */}
-            </div>
+          {/* Navigation Menu */}
+          <nav className="flex-1 px-4 py-6 space-y-3 overflow-y-auto min-h-0">
+            {navItems.map(({ label, hash, icon: Icon }) => {
+              const isActive = currentHash === hash;
+              return (
+                <button
+                  key={hash}
+                  onClick={() => {
+                    window.location.hash = hash;
+                    if (onClose) onClose();
+                  }}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all shadow-sm ${
+                    isActive
+                      ? 'bg-blue-50 border-blue-200 text-blue-700'
+                      : 'bg-white border-gray-200 text-gray-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <Icon size={18} className={isActive ? 'text-blue-600' : 'text-gray-500'} />
+                    <span className="text-sm font-semibold">{label}</span>
+                  </div>
+                  {isActive && (
+                    <span className="text-[11px] font-semibold text-blue-600 bg-white border border-blue-200 px-2 py-0.5 rounded-full">
+                      Aktif
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </nav>
 
           {/* User Info & Logout - Sticky di bagian bawah */}
